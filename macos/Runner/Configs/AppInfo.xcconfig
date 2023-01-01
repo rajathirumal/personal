@@ -8,7 +8,7 @@
 PRODUCT_NAME = personal
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.personal
+PRODUCT_BUNDLE_IDENTIFIER = com.rajathirumal.personal
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
