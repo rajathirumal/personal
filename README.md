@@ -1,16 +1,17 @@
-# personal
+# Personal
 
-A new Flutter project.
+Aa application for all you'r personal stuffs. 
+Including features such as insights of everything that you need.
 
-## Getting Started
+## Instalation
 
-This project is a starting point for a Flutter application.
+    git clone https://github.com/rajathirumal/FuelTracker.git
 
-A few resources to get you started if this is your first Flutter project:
+    flutter pub get
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Contact
+Ping me on ***LinkedIn:*** 
+    https://www.linkedin.com/in/raja-thirumal-govindaraj-936b06159/
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Projects are at ***GitHub:*** 
+    https://github.com/rajathirumal
