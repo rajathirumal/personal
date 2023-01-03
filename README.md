@@ -3,6 +3,15 @@
 Aa application for all you'r personal stuffs. 
 Including features such as insights of everything that you need.
 
+
+## Dependencies
+
+| Dependency or Module name  | Version used | Usage |
+| ------------- | ------------- | ------------- |
+| firebase_core | Leatest | Core firebase utility |
+| firebase_auth | Leatest | To perform firebase authentication |
+| provider | Leatest | State management |
+
 ## Instalation
 
     Step 1: git clone https://github.com/rajathirumal/personal.git
