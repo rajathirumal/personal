@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:personal/helpers/app_theme.dart';
 import 'package:personal/pages/entry/login.dart';
 import 'package:personal/pages/entry/personal_home.dart';
 import 'package:personal/services/auth_services.dart';
@@ -32,8 +33,41 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.cyan,
+        theme: //ThemeData.dark(),
+            // used in home.dart
+            ThemeData(
+          cardTheme: CardTheme(
+            color: Colors.purple[100],
+            elevation: 8.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          popupMenuTheme: PopupMenuThemeData(
+            color: MyAppThemeProperties.backGroundColor,
+            textStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
+            elevation: 20,
+          ),
+          // used in dd_fuel_page.dart
+          buttonTheme: const ButtonThemeData(
+            textTheme: ButtonTextTheme.normal,
+            buttonColor: MyAppThemeProperties.actionColor,
+          ),
+          // used all over the app
+          scaffoldBackgroundColor: Colors.purple[50],
+          appBarTheme: AppBarTheme(
+            backgroundColor: MyAppThemeProperties.backGroundColor,
+            titleTextStyle: MyAppThemeProperties.titleTextColor,
+            elevation: 0.0,
+            iconTheme: const IconThemeData(color: Colors.black),
+          ),
+
+          dividerColor: Colors.blueGrey,
+          primarySwatch: MyAppThemeProperties.actionColor,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: const AuthWrapper(),
       ),
