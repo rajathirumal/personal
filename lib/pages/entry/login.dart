@@ -16,10 +16,11 @@ class _LoginState extends State<Login> {
   TextEditingController passController = TextEditingController();
 
   bool loginError = false;
+  int missedPassword = 3;
   bool isPasswordHidden = true;
 
   final _formKey = GlobalKey<FormState>();
-
+  final _passResetForm = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,9 +195,10 @@ class _LoginState extends State<Login> {
                                     setState(() {
                                       // setState(() {
                                       loginError = true;
+                                      missedPassword++;
                                       // });
-                                      Future.delayed(
-                                          const Duration(seconds: 3), () {
+                                      Future.delayed(const Duration(seconds: 3),
+                                          () {
                                         setState(() {
                                           loginError = false;
                                         });
@@ -218,22 +220,49 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 30),
                 // Signup link
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUp(),
+                Visibility(
+                  visible: (missedPassword < 3),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUp(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'New user? Sign up.',
+                          style: TextStyle(color: Colors.blue),
                         ),
-                      );
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        text: 'New user? Sign up.',
-                        style: TextStyle(color: Colors.blue),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: (missedPassword >= 3),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          resetPasswordDialoug(context);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const ResetPassword(),
+                          //   ),
+                          // );
+                        },
+                        child: const Text(
+                          'Try reseting the password',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -241,6 +270,87 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> resetPasswordDialoug(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Password reset for'),
+          content: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              border: Border.all(
+                color: Colors.black26,
+                width: 1.0,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Form(
+                key: _passResetForm,
+                child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    label: Text("Email"),
+                    hintText: "Email to reset password",
+                    // prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty || !value.emailRegex) {
+                      return 'Enter valid email.(Example: user@domain.com)';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Reset'),
+              onPressed: () async {
+                if (_passResetForm.currentState!.validate()) {
+                  String x =
+                      await Provider.of<AuthServices>(context, listen: false)
+                          .resetPassword(email: emailController.text);
+                  //     .then(
+                  //   (value) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //         content: Text(value),
+                  //       ),
+                  //     );
+                  //   },
+                  // );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(x),
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
