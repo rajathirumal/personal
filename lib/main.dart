@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:personal/helpers/app_theme.dart';
 import 'package:personal/pages/entry/login.dart';
-import 'package:personal/pages/entry/personal_home.dart';
+import 'package:personal/pages/personal_home.dart';
 import 'package:personal/services/auth_services.dart';
 import 'package:provider/provider.dart';
 

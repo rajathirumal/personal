@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:personal/services/auth_services.dart';
+import 'package:provider/provider.dart';
 
 class PersonalHome extends StatefulWidget {
   const PersonalHome({super.key});
@@ -7,10 +9,59 @@ class PersonalHome extends StatefulWidget {
   State<PersonalHome> createState() => _PersonalHomeState();
 }
 
+enum MenuOptions {
+  logout,
+}
+
 class _PersonalHomeState extends State<PersonalHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          PopupMenuButton<MenuOptions>(
+            onSelected: (value) {
+              switch (value) {
+                case MenuOptions.logout:
+                  Provider.of<AuthServices>(context, listen: false).signOut();
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<MenuOptions>>[
+                // PopupMenuItem(
+                //   value: MenuOptions.analytics,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: const [
+                //       Icon(
+                //         Icons.analytics_outlined,
+                //         color: Colors.black,
+                //       ),
+                //       Text("Analysis"),
+                //     ],
+                //   ),
+                // ),
+                // const PopupMenuDivider(height: 1),
+                PopupMenuItem(
+                  value: MenuOptions.logout,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
+                      Text("Logout"),
+                    ],
+                  ),
+                ),
+              ];
+            },
+          )
+        ],
+      ),
       body: const Center(
         child: Text("Personal home"),
       ),
