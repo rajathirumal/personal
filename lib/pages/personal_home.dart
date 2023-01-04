@@ -23,7 +23,7 @@ class _PersonalHomeState extends State<PersonalHome> {
             onSelected: (value) {
               switch (value) {
                 case MenuOptions.logout:
-                  Provider.of<AuthServices>(context).signOut();
+                  Provider.of<AuthServices>(context, listen: false).signOut();
                   break;
                 default:
               }
