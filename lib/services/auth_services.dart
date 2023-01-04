@@ -34,7 +34,7 @@ class AuthServices {
   Future<String> resetPassword({required String email}) async {
     try {
       await firebaseAuth.sendPasswordResetEmail(email: email);
-      return "Password reset link sent to : $email";
+      return "Password reset link sent to : $email. Please check the spam folder too.";
     } on FirebaseException catch (e) {
       return "Error caused due to : ${e.code}";
     }

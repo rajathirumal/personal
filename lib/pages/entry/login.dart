@@ -327,7 +327,7 @@ class _LoginState extends State<Login> {
               child: const Text('Reset'),
               onPressed: () async {
                 if (_passResetForm.currentState!.validate()) {
-                  String x =
+                  String snackText =
                       await Provider.of<AuthServices>(context, listen: false)
                           .resetPassword(email: emailController.text);
                   //     .then(
@@ -341,7 +341,8 @@ class _LoginState extends State<Login> {
                   // );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(x),
+                      content: Text(snackText),
+                      duration: const Duration(seconds: 5),
                     ),
                   );
                   Navigator.of(context).pop();
