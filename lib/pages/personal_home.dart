@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:personal/pages/expense/add_expense.dart';
+import 'package:personal/pages/expense/expense_home.dart';
+import 'package:personal/pages/fuel/add_fuel.dart';
+import 'package:personal/pages/fuel/fuel_home.dart';
 import 'package:personal/services/auth_services.dart';
 import 'package:provider/provider.dart';
 
@@ -9,9 +13,7 @@ class PersonalHome extends StatefulWidget {
   State<PersonalHome> createState() => _PersonalHomeState();
 }
 
-enum MenuOptions {
-  logout,
-}
+enum MenuOptions { logout, userProfile }
 
 class _PersonalHomeState extends State<PersonalHome> {
   @override
@@ -24,6 +26,9 @@ class _PersonalHomeState extends State<PersonalHome> {
               switch (value) {
                 case MenuOptions.logout:
                   Provider.of<AuthServices>(context, listen: false).signOut();
+                  break;
+                case MenuOptions.userProfile:
+                  // Provider.of<AuthServices>(context, listen: false).signOut();
                   break;
                 default:
               }
@@ -57,6 +62,19 @@ class _PersonalHomeState extends State<PersonalHome> {
                     ],
                   ),
                 ),
+                PopupMenuItem(
+                  value: MenuOptions.userProfile,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Icon(
+                        Icons.account_circle_outlined,
+                        color: Colors.black,
+                      ),
+                      Text("User profile"),
+                    ],
+                  ),
+                ),
               ];
             },
           )
@@ -83,17 +101,28 @@ class _PersonalHomeState extends State<PersonalHome> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Adding expense !?'),
-          content: const Text(
-              'If you are trying to add a fuel, please navigate to the add fuel page,\n\n'
-              'Simply click on "Take me to fuel page" '),
+          content: const Text('Keep track of your expenses \n\n'
+              'What sort of expense are you trying yo make ?'),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('Take me to fuel page'),
-              onPressed: () {
-                Navigator.of(context).pop();
+              child: const Text('Fuel expense'),
+              onPressed: () async {
+                Navigator.of(context).pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FuelHome(),
+                  ),
+                );
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddFuel(),
+                  ),
+                );
               },
             ),
             TextButton(
@@ -101,8 +130,20 @@ class _PersonalHomeState extends State<PersonalHome> {
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('Other expense'),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                Navigator.of(context).pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ExpenseHome(),
+                  ),
+                );
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddExpense(),
+                  ),
+                );
               },
             ),
           ],

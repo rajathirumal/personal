@@ -57,9 +57,10 @@ class MyApp extends StatelessWidget {
             buttonColor: MyAppThemeProperties.actionColor,
           ),
           // used all over the app
-          scaffoldBackgroundColor: Colors.purple[50],
+          scaffoldBackgroundColor: Colors.deepOrange[50],
           appBarTheme: AppBarTheme(
             backgroundColor: MyAppThemeProperties.backGroundColor,
+            // MyAppThemeProperties.backGroundColor,
             titleTextStyle: MyAppThemeProperties.titleTextColor,
             elevation: 0.0,
             iconTheme: const IconThemeData(color: Colors.black),

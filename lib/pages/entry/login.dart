@@ -16,7 +16,7 @@ class _LoginState extends State<Login> {
   TextEditingController passController = TextEditingController();
 
   bool loginError = false;
-  int missedPassword = 3;
+  int missedPassword = 0;
   bool isPasswordHidden = true;
 
   final _formKey = GlobalKey<FormState>();
