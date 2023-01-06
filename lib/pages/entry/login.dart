@@ -22,6 +22,13 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _passResetForm = GlobalKey<FormState>();
   @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
