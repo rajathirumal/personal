@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal/widgets/selected_friend_card.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -12,8 +13,16 @@ class _AddExpenseState extends State<AddExpense> {
     "Self",
     "Friend 1",
     "Friend 2",
-    "Friend 3"
+    "Friend 3",
+    "Friend 4",
+    "Friend 5",
+    "Friend 6",
+    "Friend 7",
+    "Friend 8",
+    "Friend 9",
+    "Friend 10"
   ];
+  List<String> _selectedFriends = [];
 
   // final List<Widget> friends = <Widget>[
   //   Expanded(child: Text("Self")),
@@ -174,10 +183,37 @@ class _AddExpenseState extends State<AddExpense> {
                             child: Text(value),
                           );
                         }).toList(),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              if (_selectedFriends.contains(value)) {
+                                _selectedFriends.remove(value);
+                              } else {
+                                _selectedFriends.add(value);
+                              }
+                            });
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20.0),
+
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _selectedFriends.map((selectedFriend) {
+                        return SelectedFriendCard(friendName: selectedFriend);
+                      }).toList(),
+                    ),
+                  ),
+
                   const SizedBox(height: 20.0),
                   //  location optional
                   Container(
@@ -211,7 +247,9 @@ class _AddExpenseState extends State<AddExpense> {
                       style:
                           ButtonStyle(elevation: MaterialStateProperty.all(20)),
                       icon: const Icon(Icons.save, color: Colors.white),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_expenseForm.currentState!.validate()) {}
+                      },
                       label: const Text('Save expense',
                           style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
