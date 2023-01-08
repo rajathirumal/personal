@@ -39,6 +39,8 @@ dependencies:
   firebase_core:
   firebase_auth:
   provider:
+  location:
+  geocoder_buddy:
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:personal/models/location_model.dart';
 import 'package:personal/widgets/selected_friend_card.dart';
+import 'package:location/location.dart';
+import 'package:geocoder_buddy/geocoder_buddy.dart';
+// import 'package:flutter/services.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -22,7 +26,7 @@ class _AddExpenseState extends State<AddExpense> {
     "Friend 9",
     "Friend 10"
   ];
-  List<String> _selectedFriends = [];
+  final List<String> _selectedFriends = [];
 
   // final List<Widget> friends = <Widget>[
   //   Expanded(child: Text("Self")),
@@ -34,6 +38,7 @@ class _AddExpenseState extends State<AddExpense> {
   List<String> selectedFriends = [];
 
   final _expenseForm = GlobalKey<FormState>();
+  TextEditingController locationTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +234,7 @@ class _AddExpenseState extends State<AddExpense> {
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         keyboardType: TextInputType.emailAddress,
-                        // controller: emailController,
+                        controller: locationTEC,
                         decoration: const InputDecoration(
                           label: Text("Location (Optional)"),
                           hintText: "Jio Mart / Amazon",
@@ -248,7 +253,14 @@ class _AddExpenseState extends State<AddExpense> {
                           ButtonStyle(elevation: MaterialStateProperty.all(20)),
                       icon: const Icon(Icons.save, color: Colors.white),
                       onPressed: () {
-                        if (_expenseForm.currentState!.validate()) {}
+                        if (_expenseForm.currentState!.validate()) {
+                          if (locationTEC.text.isEmpty) {
+                            print("location empty");
+                            MyLocation ml = _getLocationPermission();
+                            print(_getAddress(ml.latitude, ml.longitude));
+                            // _getGeoLocationPermission();
+                          }
+                        }
                       },
                       label: const Text('Save expense',
                           style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -260,6 +272,78 @@ class _AddExpenseState extends State<AddExpense> {
           ),
         ),
       ),
+    );
+  }
+
+  String _getAddress(double lat, double lon) {
+    String rAddress = "Chennai, TamilNadu, India";
+
+    GBLatLng position = GBLatLng(lat: lat, lng: lon);
+    GeocoderBuddy.findDetails(position).then((data) {
+      // print(data.address.stateDistrict);
+      rAddress =
+          "${data.address.stateDistrict}, ${data.address.state}, ${data.address.country}";
+      return rAddress;
+    });
+
+    return rAddress;
+  }
+
+  MyLocation _getLocationPermission() {
+    // Default Chennai ==> 13.0827, 80.2707
+    Location location = Location();
+// Handel location service checks
+    location.serviceEnabled().then((isServiceEnabled) {
+      // if location service not enabled
+      if (!isServiceEnabled) {
+        // request for location service
+        location.requestService().then((resStatus) {
+          isServiceEnabled = resStatus;
+        });
+      }
+      // if location not enabled after requesting prompt user to provide via snackbar
+      if (!isServiceEnabled) {
+        const snackBar = SnackBar(
+          content: Text('Location should be enabled to save the data \n'
+              ' Try switching on the location'),
+          duration: Duration(seconds: 5),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+      // if location is on
+      else {
+        // Handel app location permission checks
+        location.hasPermission().then((permissionStatus) {
+          // App location permission is rejected
+          if (permissionStatus == PermissionStatus.denied) {
+            // request for app location permission
+            location.requestPermission().then((appPermissionStatus) {
+              permissionStatus = appPermissionStatus;
+            });
+          }
+          // app location permission not provided after retry
+          if (permissionStatus == PermissionStatus.denied) {
+            const snackBar = SnackBar(
+              content: Text(
+                  'Location permission be provided for the app to save the data \n'
+                  ' Try switching on the location'),
+              duration: Duration(seconds: 5),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else {
+            location.getLocation().then((locationData) {
+              return MyLocation(
+                latitude: locationData.latitude ?? 11.1085,
+                longitude: locationData.longitude ?? 77.3411,
+              );
+            });
+          }
+        });
+      }
+    });
+    return MyLocation(
+      latitude: 11.1085,
+      longitude: 77.3411,
     );
   }
 }

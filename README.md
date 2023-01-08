@@ -11,6 +11,8 @@ Including features such as insights of everything that you need.
 | firebase_core | Leatest | Core firebase utility |
 | firebase_auth | Leatest | To perform firebase authentication |
 | provider | Leatest | State management |
+| geolocator | Leatest | Location used when getting user inputs such as forms |
+
 
 ## Instalation
 
