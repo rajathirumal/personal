@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personal/models/location_model.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:personal/widgets/selected_friend_card.dart';
-import 'package:location/location.dart';
-import 'package:geocoder_buddy/geocoder_buddy.dart';
-// import 'package:flutter/services.dart';
+import 'package:location/location.dart' as locationPackage;
+import 'package:flutter/services.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -256,8 +255,31 @@ class _AddExpenseState extends State<AddExpense> {
                         if (_expenseForm.currentState!.validate()) {
                           if (locationTEC.text.isEmpty) {
                             print("location empty");
-                            MyLocation ml = _getLocationPermission();
-                            print(_getAddress(ml.latitude, ml.longitude));
+                            _getLocationPermission().then((dataMap) {
+                              print(dataMap.toString());
+                              if (dataMap["hasError"]) {
+                                var snackBar = SnackBar(
+                                  content: Text(dataMap["eMsg"].toString()),
+                                  duration: const Duration(seconds: 5),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else {
+                                // Call get location name
+                                _getAddress(
+                                        lat: dataMap["data"]["latitude"],
+                                        lon: dataMap["data"]["longitude"])
+                                    .then((addressMap) {
+                                  print(">> " + addressMap["data"]);
+                                });
+                              }
+                            });
+
+                            // print(">>> " +
+                            //     ml.latitude.toString() +
+                            //     "-----" +
+                            //     ml.longitude.toString());
+                            // print(_getAddress(ml.latitude, ml.longitude));
                             // _getGeoLocationPermission();
                           }
                         }
@@ -275,75 +297,88 @@ class _AddExpenseState extends State<AddExpense> {
     );
   }
 
-  String _getAddress(double lat, double lon) {
-    String rAddress = "Chennai, TamilNadu, India";
+  Future<Map<dynamic, dynamic>> _getAddress(
+      {required double lat, required double lon}) async {
+    String rAddress = "Default city, Default state, Default country";
+    Map rMap = {"hasError": true, "eMsg": "default eMsg"};
 
-    GBLatLng position = GBLatLng(lat: lat, lng: lon);
-    GeocoderBuddy.findDetails(position).then((data) {
-      // print(data.address.stateDistrict);
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
+
+    if (placemarks.isNotEmpty) {
+      var data = placemarks.first;
+      // rAddress = "${data.subAdminArea}, ${data.adminArea}, ${data.countryName}";
       rAddress =
-          "${data.address.stateDistrict}, ${data.address.state}, ${data.address.country}";
-      return rAddress;
-    });
+          "${data.subLocality}, ${data.administrativeArea}, ${data.country}";
+      rMap.remove("hasError");
+      rMap.remove("eMsg");
+      rMap.addAll({"hasError": false});
+      rMap.addAll({"data": rAddress});
 
-    return rAddress;
+      return Future.value(rMap);
+    } else {
+      rMap.remove("hasError");
+      rMap.remove("eMsg");
+      rMap.addAll({"hasError": false});
+      rMap.addAll({"eMgs": "No data available"});
+      return Future.value(rMap);
+    }
   }
 
-  MyLocation _getLocationPermission() {
-    // Default Chennai ==> 13.0827, 80.2707
-    Location location = Location();
-// Handel location service checks
-    location.serviceEnabled().then((isServiceEnabled) {
-      // if location service not enabled
-      if (!isServiceEnabled) {
-        // request for location service
-        location.requestService().then((resStatus) {
-          isServiceEnabled = resStatus;
+  Future<Map<dynamic, dynamic>> _getLocationPermission() async {
+    locationPackage.Location location = locationPackage.Location();
+
+    bool isLocationServiceEnabled;
+    locationPackage.PermissionStatus permissionGranted;
+    Map rMap = {"hasError": true, "eMsg": "default eMsg"};
+
+    isLocationServiceEnabled = await location.serviceEnabled();
+    if (!isLocationServiceEnabled) {
+      isLocationServiceEnabled = await location.requestService();
+      if (!isLocationServiceEnabled) {
+        rMap.remove("hasError");
+        rMap.remove("eMsg");
+        rMap.addAll({"hasError": true});
+        rMap.addAll({
+          "eMsg":
+              "Location should be enabled to save the data.\n Try switching on the location"
         });
+        return Future.value(rMap);
       }
-      // if location not enabled after requesting prompt user to provide via snackbar
-      if (!isServiceEnabled) {
-        const snackBar = SnackBar(
-          content: Text('Location should be enabled to save the data \n'
-              ' Try switching on the location'),
-          duration: Duration(seconds: 5),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-      // if location is on
-      else {
-        // Handel app location permission checks
-        location.hasPermission().then((permissionStatus) {
-          // App location permission is rejected
-          if (permissionStatus == PermissionStatus.denied) {
-            // request for app location permission
-            location.requestPermission().then((appPermissionStatus) {
-              permissionStatus = appPermissionStatus;
-            });
-          }
-          // app location permission not provided after retry
-          if (permissionStatus == PermissionStatus.denied) {
-            const snackBar = SnackBar(
-              content: Text(
-                  'Location permission be provided for the app to save the data \n'
-                  ' Try switching on the location'),
-              duration: Duration(seconds: 5),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          } else {
-            location.getLocation().then((locationData) {
-              return MyLocation(
-                latitude: locationData.latitude ?? 11.1085,
-                longitude: locationData.longitude ?? 77.3411,
-              );
-            });
-          }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == locationPackage.PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != locationPackage.PermissionStatus.granted) {
+        rMap.remove("hasError");
+        rMap.remove("eMsg");
+        rMap.addAll({"hasError": true});
+        rMap.addAll({
+          "eMsg":
+              "Location permission be provided for the app to save the data \n Try switching on the location"
         });
+        return Future.value(rMap);
       }
+    }
+    // _locationData = await location.getLocation();
+    await location.getLocation().then((value) {
+      rMap.remove("hasError");
+      rMap.remove("eMsg");
+      rMap.addAll({"hasError": false});
+      rMap.addAll({
+        "data": {
+          "latitude": value.latitude ?? 11.1085,
+          "longitude": value.longitude ?? 77.3411
+        }
+      });
+      return Future.value(rMap);
+    }).onError((error, stackTrace) {
+      rMap.remove("hasError");
+      rMap.remove("eMsg");
+      rMap.addAll({"hasError": true});
+      rMap.addAll({"eMsg": error.toString()});
+      return Future.value(rMap);
     });
-    return MyLocation(
-      latitude: 11.1085,
-      longitude: 77.3411,
-    );
+    return Future.value(rMap);
   }
 }
