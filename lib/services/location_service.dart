@@ -1,89 +1,87 @@
 import 'package:geocoding/geocoding.dart';
-import 'package:location/location.dart' as locationPackage;
+import 'package:location/location.dart' as location_package;
 
 class LocationService {
+  final location_package.Location _location = location_package.Location();
+  final Map _rMap = {"hasError": true, "eMsg": "default eMsg"};
+  String _rAddress = "Default city, Default state, Default country";
+  bool _isLocationServiceEnabled = false;
+
   Future<Map<dynamic, dynamic>> getAddress(
       {required double lat, required double lon}) async {
-    String rAddress = "Default city, Default state, Default country";
-    Map rMap = {"hasError": true, "eMsg": "default eMsg"};
-
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
 
     if (placemarks.isNotEmpty) {
       var data = placemarks.first;
       // rAddress = "${data.subAdminArea}, ${data.adminArea}, ${data.countryName}";
-      rAddress =
+      _rAddress =
           "${data.subLocality}, ${data.administrativeArea}, ${data.country}";
-      rMap.remove("hasError");
-      rMap.remove("eMsg");
-      rMap.addAll({"hasError": false});
-      rMap.addAll({"data": rAddress});
+      _rMap.remove("hasError");
+      _rMap.remove("eMsg");
+      _rMap.addAll({"hasError": false});
+      _rMap.addAll({"data": _rAddress});
 
-      return Future.value(rMap);
+      return Future.value(_rMap);
     } else {
-      rMap.remove("hasError");
-      rMap.remove("eMsg");
-      rMap.addAll({"hasError": false});
-      rMap.addAll({"eMgs": "No data available"});
-      return Future.value(rMap);
+      _rMap.remove("hasError");
+      _rMap.remove("eMsg");
+      _rMap.addAll({"hasError": false});
+      _rMap.addAll({"eMgs": "No data available"});
+      return Future.value(_rMap);
     }
   }
 
   Future<Map<dynamic, dynamic>> getLocationPermission() async {
-    locationPackage.Location location = locationPackage.Location();
+    location_package.PermissionStatus permissionGranted;
 
-    bool isLocationServiceEnabled;
-    locationPackage.PermissionStatus permissionGranted;
-    Map rMap = {"hasError": true, "eMsg": "default eMsg"};
-
-    isLocationServiceEnabled = await location.serviceEnabled();
-    if (!isLocationServiceEnabled) {
-      isLocationServiceEnabled = await location.requestService();
-      if (!isLocationServiceEnabled) {
-        rMap.remove("hasError");
-        rMap.remove("eMsg");
-        rMap.addAll({"hasError": true});
-        rMap.addAll({
+    _isLocationServiceEnabled = await _location.serviceEnabled();
+    if (!_isLocationServiceEnabled) {
+      _isLocationServiceEnabled = await _location.requestService();
+      if (!_isLocationServiceEnabled) {
+        _rMap.remove("hasError");
+        _rMap.remove("eMsg");
+        _rMap.addAll({"hasError": true});
+        _rMap.addAll({
           "eMsg":
               "Location should be enabled to save the data.\n Try switching on the location"
         });
-        return Future.value(rMap);
+        return Future.value(_rMap);
       }
     }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == locationPackage.PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != locationPackage.PermissionStatus.granted) {
-        rMap.remove("hasError");
-        rMap.remove("eMsg");
-        rMap.addAll({"hasError": true});
-        rMap.addAll({
+    permissionGranted = await _location.hasPermission();
+    if (permissionGranted == location_package.PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != location_package.PermissionStatus.granted) {
+        _rMap.remove("hasError");
+        _rMap.remove("eMsg");
+        _rMap.addAll({"hasError": true});
+        _rMap.addAll({
           "eMsg":
               "Location permission be provided for the app to save the data \n Try switching on the location"
         });
-        return Future.value(rMap);
+        return Future.value(_rMap);
       }
     }
-    // _locationData = await location.getLocation();
-    await location.getLocation().then((value) {
-      rMap.remove("hasError");
-      rMap.remove("eMsg");
-      rMap.addAll({"hasError": false});
-      rMap.addAll({
+
+    await _location.getLocation().then((value) {
+      _rMap.remove("hasError");
+      _rMap.remove("eMsg");
+      _rMap.addAll({"hasError": false});
+      _rMap.addAll({
         "data": {
           "latitude": value.latitude ?? 11.1085,
           "longitude": value.longitude ?? 77.3411
         }
       });
-      return Future.value(rMap);
+      return Future.value(_rMap);
     }).onError((error, stackTrace) {
-      rMap.remove("hasError");
-      rMap.remove("eMsg");
-      rMap.addAll({"hasError": true});
-      rMap.addAll({"eMsg": error.toString()});
-      return Future.value(rMap);
+      _rMap.remove("hasError");
+      _rMap.remove("eMsg");
+      _rMap.addAll({"hasError": true});
+      _rMap.addAll({"eMsg": error.toString()});
+      return Future.value(_rMap);
     });
-    return Future.value(rMap);
+    return Future.value(_rMap);
   }
 }
