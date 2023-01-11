@@ -4,6 +4,7 @@ import 'package:personal/pages/expense/expense_home.dart';
 import 'package:personal/pages/fuel/add_fuel.dart';
 import 'package:personal/pages/fuel/fuel_home.dart';
 import 'package:personal/services/auth_services.dart';
+import 'package:personal/widgets/navigation_bar.dart';
 import 'package:provider/provider.dart';
 
 class PersonalHome extends StatefulWidget {
@@ -80,6 +81,7 @@ class _PersonalHomeState extends State<PersonalHome> {
           )
         ],
       ),
+      drawer: PersonalNavBar(),
       body: const Center(
         child: Text("Personal home"),
       ),
