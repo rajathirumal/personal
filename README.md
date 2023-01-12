@@ -13,6 +13,7 @@ Including features such as insights of everything that you need.
 | provider | Leatest | State management |
 | geocoding | Leatest | Get address from coordinates |
 | location | Leatest | Get coordinates |
+| cloud_firestore| Leatest | To consume firebase realtime database |
 
 
 ## Instalation
