@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:personal/helpers/app_theme.dart';
 import 'package:personal/pages/entry/login.dart';
 import 'package:personal/pages/personal_home.dart';
 import 'package:personal/services/auth_services.dart';
+import 'package:personal/services/user_services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -21,6 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ///
+        /// Auth providers
+        ///
         Provider(
           create: (context) =>
               AuthServices(firebaseAuth: FirebaseAuth.instance),
@@ -28,6 +33,14 @@ class MyApp extends StatelessWidget {
         StreamProvider(
           create: (context) => context.read<AuthServices>().authState,
           initialData: null,
+        ),
+
+        ///
+        /// User providers
+        ///
+        Provider(
+          create: (context) =>
+              UserServices(firebaseFirestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personal/helpers/extension.dart';
+import 'package:personal/services/auth_services.dart';
+import 'package:personal/services/user_services.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -160,10 +163,19 @@ class _SignUpState extends State<SignUp> {
                               const Icon(Icons.person_add, color: Colors.white),
                           onPressed: () {
                             if (_signupFormKey.currentState!.validate()) {
-                              // print(emailTEC.text +
-                              //     passwordTEC.text +
-                              //     displayNameTEC.text);
+                              Provider.of<UserServices>(context, listen: false)
+                                  .setUserDeatils(
+                                displayName: displayNameTEC.text,
+                                email: emailTEC.text,
+                              );
+
+                              Provider.of<AuthServices>(context, listen: false)
+                                  .signup(
+                                      email: emailTEC.text,
+                                      password: passwordTEC.text);
                             }
+
+                            Navigator.pop(context);
                           },
                           label: const Text(
                             'Sign up',

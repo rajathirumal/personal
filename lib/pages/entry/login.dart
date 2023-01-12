@@ -337,15 +337,6 @@ class _LoginState extends State<Login> {
                   String snackText =
                       await Provider.of<AuthServices>(context, listen: false)
                           .resetPassword(email: emailController.text);
-                  //     .then(
-                  //   (value) {
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       SnackBar(
-                  //         content: Text(value),
-                  //       ),
-                  //     );
-                  //   },
-                  // );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(snackText),
