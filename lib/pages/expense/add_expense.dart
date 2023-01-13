@@ -1,9 +1,15 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:personal/models/add_expense_model.dart';
+import 'package:personal/services/auth_services.dart';
+import 'package:personal/services/expense_service.dart';
 import 'package:personal/widgets/selected_friend_card.dart';
 import 'package:personal/services/location_service.dart';
 import 'package:personal/widgets/snack_bars.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -28,16 +34,12 @@ class _AddExpenseState extends State<AddExpense> {
   ];
   final List<String> _selectedFriends = [];
 
-  // final List<Widget> friends = <Widget>[
-  //   Expanded(child: Text("Self")),
-  //   Expanded(child: Text("Friend 1")),
-  //   Expanded(child: Text("Friend 2")),
-  //   Expanded(child: Text("Friend 3")),
-  // ];
-
   List<String> selectedFriends = [];
 
   final _expenseForm = GlobalKey<FormState>();
+  TextEditingController itemNameTEC = TextEditingController();
+  TextEditingController countTEC = TextEditingController();
+  TextEditingController priceTEC = TextEditingController();
   TextEditingController locationTEC = TextEditingController();
 
   void loadCurrentAddress() {
@@ -115,7 +117,7 @@ class _AddExpenseState extends State<AddExpense> {
                       child: TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         keyboardType: TextInputType.emailAddress,
-                        // controller: emailController,
+                        controller: itemNameTEC,
                         decoration: const InputDecoration(
                           label: Text("Item Name"),
                           hintText: "Chocolates",
@@ -154,7 +156,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.number,
-                                // controller: emailController,
+                                controller: countTEC,
                                 decoration: const InputDecoration(
                                   label: Text("Count"),
                                   hintText: "10",
@@ -186,7 +188,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.number,
-                                // controller: emailController,
+                                controller: priceTEC,
                                 decoration: const InputDecoration(
                                   label: Text("Price"),
                                   hintText: "5",
@@ -309,12 +311,26 @@ class _AddExpenseState extends State<AddExpense> {
                                       "We are unable to get your location \n Please privide the location information",
                                 ),
                               );
-                            }else{
-                              
                             }
-
                           } else {
                             // proceed to Firebase submit
+                            Provider.of<ExpenseService>(context, listen: false)
+                                .addAnEcpense(
+                                    firestoreInstanse:
+                                        Provider.of<FirebaseFirestore>(context,
+                                            listen: false),
+                                    newExpense: SingleExpense(
+                                        expenseID: Uuid().v4(),
+                                        itemName: itemNameTEC.text,
+                                        count: countTEC.text,
+                                        price: priceTEC.text,
+                                        friends: _selectedFriends,
+                                        location: locationTEC.text),
+                                    userEmail: Provider.of<AuthServices>(
+                                            context,
+                                            listen: false)
+                                        .currentLoggedInUser!
+                                        .email!);
                           }
                         }
                       },

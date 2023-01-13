@@ -6,6 +6,7 @@ import 'package:personal/helpers/app_theme.dart';
 import 'package:personal/pages/entry/login.dart';
 import 'package:personal/pages/personal_home.dart';
 import 'package:personal/services/auth_services.dart';
+import 'package:personal/services/expense_service.dart';
 import 'package:personal/services/user_ops_services.dart';
 import 'package:provider/provider.dart';
 
@@ -39,9 +40,15 @@ class MyApp extends StatelessWidget {
         /// User providers
         ///
         Provider(
-          create: (context) =>
-              UserOpsServices(firebaseFirestore: FirebaseFirestore.instance),
+          create: (context) => FirebaseFirestore.instance,
         ),
+        Provider(
+          create: (context) => UserOpsServices(
+              firebaseFirestore: context.read<FirebaseFirestore>()),
+        ),
+
+        /// Expense privder
+        Provider(create: (context) => ExpenseService())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
