@@ -25,10 +25,16 @@ class AuthServices {
   /// - password      --> The password associated with the user
   /// - display name  --> How the username is know throughout the app
   Future<String> signup(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String displayName}) async {
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((UserCredential uc) {
+        User cu = uc.user!;
+        cu.updateDisplayName(displayName);
+      });
       return "Signed up";
     } on FirebaseAuthException catch (e) {
       return e.message.toString();

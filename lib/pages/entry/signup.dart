@@ -173,8 +173,8 @@ class _SignUpState extends State<SignUp> {
                               //  sugn up the user
                               Provider.of<AuthServices>(context, listen: false)
                                   .signup(
-                                      email: emailTEC.text,
-                                      password: passwordTEC.text);
+                                      email: emailTEC.text.toLowerCase(),
+                                      password: passwordTEC.text,displayName: displayNameTEC.text);
                             }
                             // Navigate to the login screen so that the current session makes the app to move to the home page
                             Navigator.pop(context);

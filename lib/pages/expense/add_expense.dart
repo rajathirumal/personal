@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:personal/widgets/selected_friend_card.dart';
 import 'package:personal/services/location_service.dart';
@@ -299,12 +301,18 @@ class _AddExpenseState extends State<AddExpense> {
                       onPressed: () {
                         if (_expenseForm.currentState!.validate()) {
                           if (locationTEC.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              sb5Sec(
-                                textContent:
-                                    "We are unable to get your location \n Please privide the location information",
-                              ),
-                            );
+                            sleep(const Duration(seconds: 3));
+                            if (locationTEC.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                sb5Sec(
+                                  textContent:
+                                      "We are unable to get your location \n Please privide the location information",
+                                ),
+                              );
+                            }else{
+                              
+                            }
+
                           } else {
                             // proceed to Firebase submit
                           }
