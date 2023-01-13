@@ -1,24 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserServices {
+class UserOpsServices {
   final FirebaseFirestore firebaseFirestore;
-  UserServices({
+  UserOpsServices({
     required this.firebaseFirestore,
   });
+  final String _userSpecificCollectionRefPath = 'users/';
 
-  Future<void> setUserDeatils(
+  Future<void> initUserFriend(
       {required String displayName, required String email}) async {
     Object updateData = {
-      "email": email,
-      "displayName": displayName,
       "friends": ["self"],
     };
     try {
-      String userSpecificCollectionRefPath = 'users/';
-
       CollectionReference userDetailsCollectionReference =
-          firebaseFirestore.collection(userSpecificCollectionRefPath);
-
+          firebaseFirestore.collection(_userSpecificCollectionRefPath);
       await userDetailsCollectionReference
           .doc(email.split('@')[0])
           .set(updateData);
@@ -26,4 +22,6 @@ class UserServices {
       print(fe);
     }
   }
+
+  
 }

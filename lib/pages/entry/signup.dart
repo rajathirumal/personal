@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal/helpers/extension.dart';
 import 'package:personal/services/auth_services.dart';
-import 'package:personal/services/user_services.dart';
+import 'package:personal/services/user_ops_services.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
@@ -163,18 +163,20 @@ class _SignUpState extends State<SignUp> {
                               const Icon(Icons.person_add, color: Colors.white),
                           onPressed: () {
                             if (_signupFormKey.currentState!.validate()) {
-                              Provider.of<UserServices>(context, listen: false)
-                                  .setUserDeatils(
+                              // Initiate the user with self as friend list
+                              Provider.of<UserOpsServices>(context,
+                                      listen: false)
+                                  .initUserFriend(
                                 displayName: displayNameTEC.text,
                                 email: emailTEC.text,
                               );
-
+                              //  sugn up the user
                               Provider.of<AuthServices>(context, listen: false)
                                   .signup(
                                       email: emailTEC.text,
                                       password: passwordTEC.text);
                             }
-
+                            // Navigate to the login screen so that the current session makes the app to move to the home page
                             Navigator.pop(context);
                           },
                           label: const Text(

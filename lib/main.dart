@@ -6,7 +6,7 @@ import 'package:personal/helpers/app_theme.dart';
 import 'package:personal/pages/entry/login.dart';
 import 'package:personal/pages/personal_home.dart';
 import 'package:personal/services/auth_services.dart';
-import 'package:personal/services/user_services.dart';
+import 'package:personal/services/user_ops_services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ///
         Provider(
           create: (context) =>
-              UserServices(firebaseFirestore: FirebaseFirestore.instance),
+              UserOpsServices(firebaseFirestore: FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
