@@ -9,6 +9,7 @@ class SingleExpense {
   String price;
   List<String> friends;
   String location;
+  String timestamp;
   SingleExpense({
     required this.expenseID,
     required this.itemName,
@@ -16,6 +17,7 @@ class SingleExpense {
     required this.price,
     required this.friends,
     required this.location,
+    required this.timestamp,
   });
 
   SingleExpense copyWith({
@@ -25,6 +27,7 @@ class SingleExpense {
     String? price,
     List<String>? friends,
     String? location,
+    String? timestamp,
   }) {
     return SingleExpense(
       expenseID: expenseID ?? this.expenseID,
@@ -33,6 +36,7 @@ class SingleExpense {
       price: price ?? this.price,
       friends: friends ?? this.friends,
       location: location ?? this.location,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -44,6 +48,7 @@ class SingleExpense {
       'price': price,
       'friends': friends,
       'location': location,
+      'timestamp': timestamp,
     };
   }
 
@@ -55,16 +60,18 @@ class SingleExpense {
       price: map['price'] ?? '',
       friends: List<String>.from(map['friends']),
       location: map['location'] ?? '',
+      timestamp: map['timestamp'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SingleExpense.fromJson(String source) => SingleExpense.fromMap(json.decode(source));
+  factory SingleExpense.fromJson(String source) =>
+      SingleExpense.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SingleExpense(expenseID: $expenseID, itemName: $itemName, count: $count, price: $price, friends: $friends, location: $location)';
+    return 'SingleExpense(expenseID: $expenseID, itemName: $itemName, count: $count, price: $price, friends: $friends, location: $location, timestamp: $timestamp)';
   }
 
   @override
@@ -77,7 +84,8 @@ class SingleExpense {
       other.count == count &&
       other.price == price &&
       listEquals(other.friends, friends) &&
-      other.location == location;
+      other.location == location &&
+      other.timestamp == timestamp;
   }
 
   @override
@@ -87,6 +95,7 @@ class SingleExpense {
       count.hashCode ^
       price.hashCode ^
       friends.hashCode ^
-      location.hashCode;
+      location.hashCode ^
+      timestamp.hashCode;
   }
 }

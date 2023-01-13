@@ -325,7 +325,8 @@ class _AddExpenseState extends State<AddExpense> {
                                         count: countTEC.text,
                                         price: priceTEC.text,
                                         friends: _selectedFriends,
-                                        location: locationTEC.text),
+                                        location: locationTEC.text,
+                                        timestamp: DateTime.now().toString()),
                                     userEmail: Provider.of<AuthServices>(
                                             context,
                                             listen: false)
