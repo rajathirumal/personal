@@ -5,8 +5,8 @@ class AuthServices {
   AuthServices({required this.firebaseAuth});
 
   Stream<User?> get authState => firebaseAuth.authStateChanges();
+  User? get currentLoggedInUser => firebaseAuth.currentUser;
 
-  // login -> email and password
   Future<String> login(
       {required String email, required String password}) async {
     try {
@@ -18,7 +18,12 @@ class AuthServices {
     }
   }
 
-  // Signup (New user) ->  email and password
+  /// ***Signup (New user)*** ->  email and password
+  ///
+  /// Parameters:
+  /// - email         --> The email ID associated with the user
+  /// - password      --> The password associated with the user
+  /// - display name  --> How the username is know throughout the app
   Future<String> signup(
       {required String email, required String password}) async {
     try {

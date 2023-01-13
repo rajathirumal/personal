@@ -41,7 +41,7 @@ class _AddExpenseState extends State<AddExpense> {
   void loadCurrentAddress() {
     LocationService locationService = LocationService();
     locationService.getLocationPermission().then((dataMap) {
-      print(dataMap.toString());
+      // print(dataMap.toString());
       if (dataMap["hasError"]) {
         ScaffoldMessenger.of(context).showSnackBar(
             sb5Sec(textContent: Text(dataMap["eMsg"].toString())));
@@ -52,7 +52,7 @@ class _AddExpenseState extends State<AddExpense> {
                 lat: dataMap["data"]["latitude"],
                 lon: dataMap["data"]["longitude"])
             .then((addressMap) {
-          print(">> from init " + addressMap["data"]);
+          // print(">> from init " + addressMap["data"]);
           locationTEC.text = addressMap["data"];
         });
       }
@@ -64,7 +64,7 @@ class _AddExpenseState extends State<AddExpense> {
     // loadCurrentAddress();
     LocationService locationService = LocationService();
     locationService.getLocationPermission().then((dataMap) {
-      print(dataMap.toString());
+      // print(dataMap.toString());
       if (dataMap["hasError"]) {
         ScaffoldMessenger.of(context).showSnackBar(
           sb5Sec(textContent: Text(dataMap["eMsg"].toString())),
@@ -76,7 +76,7 @@ class _AddExpenseState extends State<AddExpense> {
                 lat: dataMap["data"]["latitude"],
                 lon: dataMap["data"]["longitude"])
             .then((addressMap) {
-          print(">> from init " + addressMap["data"]);
+          // print(">> from init " + addressMap["data"]);
           locationTEC.text = addressMap["data"];
         });
       }
@@ -284,7 +284,7 @@ class _AddExpenseState extends State<AddExpense> {
                           hintText: "Jio Mart / Amazon",
                           prefixIcon: Icon(Icons.pin_drop_rounded),
                         ),
-                        validator: (value) {},
+                        // validator: (value) {},
                       ),
                     ),
                   ),
