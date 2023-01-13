@@ -42,7 +42,7 @@ dependencies:
   geocoding:
   location:
   cloud_firestore:
-
+  uuid:
 
   
 dev_dependencies:

@@ -81,7 +81,7 @@ class _PersonalHomeState extends State<PersonalHome> {
           )
         ],
       ),
-      drawer: PersonalNavBar(),
+      drawer: const PersonalNavBar(),
       body: const Center(
         child: Text("Personal home"),
       ),

@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    "Kindly Check you creadentials ...",
+                                    "Kindly Check your creadentials ...",
                                     style: TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontSize: 15,
@@ -192,7 +192,7 @@ class _LoginState extends State<Login> {
                               context
                                   .read<AuthServices>()
                                   .login(
-                                    email: emailController.text,
+                                    email: emailController.text.toLowerCase(),
                                     password: passController.text,
                                   )
                                   .then(
@@ -334,9 +334,9 @@ class _LoginState extends State<Login> {
               child: const Text('Reset'),
               onPressed: () async {
                 if (_passResetForm.currentState!.validate()) {
-                  String snackText =
-                      await Provider.of<AuthServices>(context, listen: false)
-                          .resetPassword(email: emailController.text);
+                  String snackText = await Provider.of<AuthServices>(context,
+                          listen: false)
+                      .resetPassword(email: emailController.text.toLowerCase());
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(snackText),

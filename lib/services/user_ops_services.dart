@@ -19,7 +19,7 @@ class UserOpsServices {
           .doc(email.split('@')[0])
           .set(updateData);
     } on FirebaseException catch (fe) {
-      print(fe);
+      // print(fe);
     }
   }
 
