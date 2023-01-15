@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserOpsServices {
-  final FirebaseFirestore firebaseFirestore;
+  final FirebaseFirestore firebaseFirestoreInstance;
   UserOpsServices({
-    required this.firebaseFirestore,
+    required this.firebaseFirestoreInstance,
   });
   final String _userSpecificCollectionRefPath = 'users/';
 
@@ -14,7 +14,7 @@ class UserOpsServices {
     };
     try {
       CollectionReference userDetailsCollectionReference =
-          firebaseFirestore.collection(_userSpecificCollectionRefPath);
+          firebaseFirestoreInstance.collection(_userSpecificCollectionRefPath);
       await userDetailsCollectionReference
           .doc(email.split('@')[0])
           .set(updateData);
@@ -22,6 +22,4 @@ class UserOpsServices {
       // print(fe);
     }
   }
-
-  
 }

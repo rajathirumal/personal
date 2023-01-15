@@ -44,11 +44,16 @@ class MyApp extends StatelessWidget {
         ),
         Provider(
           create: (context) => UserOpsServices(
-              firebaseFirestore: context.read<FirebaseFirestore>()),
+              firebaseFirestoreInstance: context.read<FirebaseFirestore>()),
         ),
 
         /// Expense privder
-        Provider(create: (context) => ExpenseService())
+        Provider(create: (context) => ExpenseService()),
+        StreamProvider(
+          create: (context) =>
+              context.read<ExpenseService>().getUsersCassualExpenses(),
+          initialData: null,
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
