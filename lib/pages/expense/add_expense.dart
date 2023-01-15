@@ -315,12 +315,12 @@ class _AddExpenseState extends State<AddExpense> {
                           } else {
                             // proceed to Firebase submit
                             Provider.of<ExpenseService>(context, listen: false)
-                                .addAnEcpense(
+                                .addAnExpense(
                                     firestoreInstanse:
                                         Provider.of<FirebaseFirestore>(context,
                                             listen: false),
                                     newExpense: SingleExpense(
-                                        expenseID: Uuid().v4(),
+                                        expenseID: const Uuid().v1(),
                                         itemName: itemNameTEC.text,
                                         count: countTEC.text,
                                         price: priceTEC.text,
