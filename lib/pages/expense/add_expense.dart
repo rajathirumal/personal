@@ -316,22 +316,20 @@ class _AddExpenseState extends State<AddExpense> {
                             // proceed to Firebase submit
                             Provider.of<ExpenseService>(context, listen: false)
                                 .addAnExpense(
-                                    firestoreInstanse:
-                                        Provider.of<FirebaseFirestore>(context,
-                                            listen: false),
-                                    newExpense: SingleExpense(
-                                        expenseID: const Uuid().v1(),
-                                        itemName: itemNameTEC.text,
-                                        count: countTEC.text,
-                                        price: priceTEC.text,
-                                        friends: _selectedFriends,
-                                        location: locationTEC.text,
-                                        timestamp: DateTime.now().toString()),
-                                    userEmail: Provider.of<AuthServices>(
-                                            context,
-                                            listen: false)
-                                        .currentLoggedInUser!
-                                        .email!);
+                              newExpense: SingleExpense(
+                                  username: context
+                                      .read<AuthServices>()
+                                      .currentLoggedInUser!
+                                      .email!
+                                      .split("@")[0],
+                                  expenseID: const Uuid().v1(),
+                                  itemName: itemNameTEC.text,
+                                  count: countTEC.text,
+                                  price: priceTEC.text,
+                                  friends: _selectedFriends,
+                                  location: locationTEC.text,
+                                  timestamp: DateTime.now().toString()),
+                            );
                           }
                         }
                       },

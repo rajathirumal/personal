@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class SingleExpense {
+  String username;
   String expenseID;
   String itemName;
   String count;
@@ -11,6 +12,7 @@ class SingleExpense {
   String location;
   String timestamp;
   SingleExpense({
+    required this.username,
     required this.expenseID,
     required this.itemName,
     required this.count,
@@ -21,6 +23,7 @@ class SingleExpense {
   });
 
   SingleExpense copyWith({
+    String? username,
     String? expenseID,
     String? itemName,
     String? count,
@@ -30,6 +33,7 @@ class SingleExpense {
     String? timestamp,
   }) {
     return SingleExpense(
+      username: username ?? this.username,
       expenseID: expenseID ?? this.expenseID,
       itemName: itemName ?? this.itemName,
       count: count ?? this.count,
@@ -42,6 +46,7 @@ class SingleExpense {
 
   Map<String, dynamic> toMap() {
     return {
+      'username': username,
       'expenseID': expenseID,
       'itemName': itemName,
       'count': count,
@@ -54,6 +59,7 @@ class SingleExpense {
 
   factory SingleExpense.fromMap(Map<String, dynamic> map) {
     return SingleExpense(
+      username: map['username'] ?? '',
       expenseID: map['expenseID'] ?? '',
       itemName: map['itemName'] ?? '',
       count: map['count'] ?? '',
@@ -66,12 +72,11 @@ class SingleExpense {
 
   String toJson() => json.encode(toMap());
 
-  factory SingleExpense.fromJson(String source) =>
-      SingleExpense.fromMap(json.decode(source));
+  factory SingleExpense.fromJson(String source) => SingleExpense.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SingleExpense(expenseID: $expenseID, itemName: $itemName, count: $count, price: $price, friends: $friends, location: $location, timestamp: $timestamp)';
+    return 'SingleExpense(username: $username, expenseID: $expenseID, itemName: $itemName, count: $count, price: $price, friends: $friends, location: $location, timestamp: $timestamp)';
   }
 
   @override
@@ -79,6 +84,7 @@ class SingleExpense {
     if (identical(this, other)) return true;
   
     return other is SingleExpense &&
+      other.username == username &&
       other.expenseID == expenseID &&
       other.itemName == itemName &&
       other.count == count &&
@@ -90,7 +96,8 @@ class SingleExpense {
 
   @override
   int get hashCode {
-    return expenseID.hashCode ^
+    return username.hashCode ^
+      expenseID.hashCode ^
       itemName.hashCode ^
       count.hashCode ^
       price.hashCode ^
@@ -98,4 +105,4 @@ class SingleExpense {
       location.hashCode ^
       timestamp.hashCode;
   }
-}
+  }
