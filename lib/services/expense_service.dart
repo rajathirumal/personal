@@ -10,7 +10,7 @@ class ExpenseService {
         .set(newExpense.toMap());
   }
 
-  Stream<void> getUsersCassualExpenses() {
+  Stream<void> getUsersCassualExpenses1() {
     return firestoreInstanse
         .collection('/casualExpenses')
         .snapshots()
@@ -24,13 +24,14 @@ class ExpenseService {
     });
   }
 
-  List<String> getExp() {
-    firestoreInstanse
-        .collection('/casualExpenses')
-        .doc()
+  Stream<List<SingleExpense>> getUsersCassualExpenses() {
+    print(">>> in");
+    return firestoreInstanse
+        .collection("/casualExpenses")
+        .orderBy("timestamp", descending: true)
         .snapshots()
-        .map((event) => print("> ////" + event.toString()));
-
-    return ["da", "da"];
+        .map((snapshot) => snapshot.docs
+            .map((document) => SingleExpense.fromMap(document.data()))
+            .toList());
   }
 }
