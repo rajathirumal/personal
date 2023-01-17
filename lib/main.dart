@@ -25,6 +25,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ///
+        /// Firestore instance
+        ///
+        Provider(
+          create: (context) => FirebaseFirestore.instance,
+        ),
+        ///
         /// Auth providers
         ///
         Provider(
@@ -39,9 +45,6 @@ class MyApp extends StatelessWidget {
         ///
         /// User providers
         ///
-        Provider(
-          create: (context) => FirebaseFirestore.instance,
-        ),
         Provider(
           create: (context) => UserOpsServices(
               firebaseFirestoreInstance: context.read<FirebaseFirestore>()),
