@@ -20,15 +20,15 @@ class ExpenseCard extends StatefulWidget {
 class _ExpenseCardState extends State<ExpenseCard> {
   @override
   Widget build(BuildContext context) {
-    final int _ind = widget.index;
-    final List<SingleExpense> _exp = widget.expense;
+    final int ind = widget.index;
+    final List<SingleExpense> exp = widget.expense;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
         child: ExpansionPanelList.radio(
           children: [
             ExpansionPanelRadio(
-              value: _exp[_ind].expenseID,
+              value: exp[ind].expenseID,
               canTapOnHeader: true,
               headerBuilder: (context, isExpanded) {
                 return Padding(
@@ -44,7 +44,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         width: 10,
                       ),
                       Text(
-                        _exp[_ind].timestamp.split(" ")[0].toString(),
+                        exp[ind].timestamp.split(" ")[0].toString(),
                         style: const TextStyle(fontSize: 15),
                       ),
                       const Spacer(),
@@ -56,10 +56,8 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         width: 10,
                       ),
                       Text(
-                        (double.parse(_exp[_ind].price) *
-                                    int.parse(_exp[_ind].count))
-                                .toString() +
-                            " ₹",
+                        "${double.parse(exp[ind].price) *
+                                    int.parse(exp[ind].count)} ₹",
                         style: const TextStyle(fontSize: 15),
                       ),
                     ],
@@ -84,7 +82,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         ),
                         Flexible(
                           child: Text(
-                            _exp[_ind].itemName.toString(),
+                            exp[ind].itemName.toString(),
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -104,7 +102,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         ),
                         Flexible(
                           child: Text(
-                            _exp[_ind].location.toString(),
+                            exp[ind].location.toString(),
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -124,7 +122,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         ),
                         Flexible(
                           child: Text(
-                            _exp[_ind].friends.map((f) => "$f ").toString(),
+                            exp[ind].friends.map((f) => "$f ").toString(),
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -144,7 +142,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         ),
                         Flexible(
                           child: Text(
-                            _exp[_ind].count,
+                            exp[ind].count,
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -158,7 +156,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         ),
                         Flexible(
                           child: Text(
-                            "${_exp[_ind].price} ₹",
+                            "${exp[ind].price} ₹",
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),

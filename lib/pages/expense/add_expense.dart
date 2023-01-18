@@ -332,6 +332,7 @@ class _AddExpenseState extends State<AddExpense> {
                             );
                           }
                         }
+                        Navigator.pop(context);
                       },
                       label: const Text('Save expense',
                           style: TextStyle(color: Colors.white, fontSize: 20)),

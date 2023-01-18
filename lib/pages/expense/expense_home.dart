@@ -4,6 +4,7 @@ import 'package:personal/models/add_expense_model.dart';
 import 'package:personal/pages/expense/add_expense.dart';
 import 'package:personal/services/expense_service.dart';
 import 'package:personal/widgets/expense_card.dart';
+import 'package:personal/widgets/oops_widget.dart';
 import 'package:provider/provider.dart';
 
 class ExpenseHome extends StatefulWidget {
@@ -21,14 +22,18 @@ class _ExpenseHomeState extends State<ExpenseHome> {
       appBar: AppBar(),
       body: (allExpenses != null)
           ? (allExpenses.isEmpty)
-              ? const CircularProgressIndicator.adaptive()
+              // ? const Center(child: CircularProgressIndicator.adaptive())
+              ? OOPSWidget()
               : ListView.builder(
                   itemCount: allExpenses.length,
                   itemBuilder: (context, index) {
-                    return ExpenseCard(expense: allExpenses ,index: index ,); //Text(allExpenses[index].count);
+                    return ExpenseCard(
+                      expense: allExpenses,
+                      index: index,
+                    ); //Text(allExpenses[index].count);
                   },
                 )
-          : const Center(child: CircularProgressIndicator.adaptive()),
+          : const Center(child: LinearProgressIndicator()),
       // StreamBuilder(
       //   stream: context
       //       .read<FirebaseFirestore>()
