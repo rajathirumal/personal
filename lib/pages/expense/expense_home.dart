@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:personal/models/add_expense_model.dart';
 import 'package:personal/pages/expense/add_expense.dart';
-import 'package:personal/services/expense_service.dart';
 import 'package:personal/widgets/expense_card.dart';
 import 'package:personal/widgets/oops_widget.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +21,7 @@ class _ExpenseHomeState extends State<ExpenseHome> {
       body: (allExpenses != null)
           ? (allExpenses.isEmpty)
               // ? const Center(child: CircularProgressIndicator.adaptive())
-              ? OOPSWidget()
+              ? const OOPSWidget()
               : ListView.builder(
                   itemCount: allExpenses.length,
                   itemBuilder: (context, index) {
