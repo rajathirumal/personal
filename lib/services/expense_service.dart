@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:personal/models/add_expense_model.dart';
 
 class ExpenseService {
@@ -15,17 +16,21 @@ class ExpenseService {
         .collection('/casualExpenses')
         .snapshots()
         .map((snapshot) {
-      print(">." + snapshot.docs.toString());
+      if (kDebugMode) {
+        print(">.${snapshot.docs}");
+      }
       snapshot.docs.map(
         (eachDoc) {
-          print(">.." + eachDoc.data.toString());
+          if (kDebugMode) {
+            print(">..${eachDoc.data}");
+          }
         },
       );
     });
   }
 
   Stream<List<SingleExpense>> getUsersCassualExpenses() {
-    print(">>> in");
+
     return firestoreInstanse
         .collection("/casualExpenses")
         .orderBy("timestamp", descending: true)

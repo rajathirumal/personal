@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class UserOpsServices {
   final FirebaseFirestore firebaseFirestoreInstance;
@@ -19,7 +20,9 @@ class UserOpsServices {
           .doc(email.split('@')[0])
           .set(updateData);
     } on FirebaseException catch (fe) {
-      // print(fe);
+      if (kDebugMode) {
+        print(fe);
+      }
     }
   }
 }

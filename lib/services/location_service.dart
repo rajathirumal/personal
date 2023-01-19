@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart' as location_package;
 
@@ -12,10 +13,13 @@ class LocationService {
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
 
     if (placemarks.isNotEmpty) {
-      var data = placemarks.first;
+      Placemark data = placemarks.first;
       // rAddress = "${data.subAdminArea}, ${data.adminArea}, ${data.countryName}";
+      if (kDebugMode) {
+        print(data.toString());
+      }
       _rAddress =
-          "${data.subLocality}, ${data.administrativeArea}, ${data.country}";
+          "${data.subLocality}, ${data.locality}, ${data.administrativeArea}";
       _rMap.remove("hasError");
       _rMap.remove("eMsg");
       _rMap.addAll({"hasError": false});
