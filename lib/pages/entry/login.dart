@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:personal/pages/entry/signup.dart';
 import 'package:personal/helpers/extension.dart';
